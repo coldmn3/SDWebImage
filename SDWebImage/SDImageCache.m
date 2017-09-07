@@ -115,15 +115,16 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
                                                      name:UIApplicationDidReceiveMemoryWarningNotification
                                                    object:nil];
 
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(deleteOldFiles)
-                                                     name:UIApplicationWillTerminateNotification
-                                                   object:nil];
-
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(backgroundDeleteOldFiles)
-                                                     name:UIApplicationDidEnterBackgroundNotification
-                                                   object:nil];
+        // disable 删除过期文件
+//        [[NSNotificationCenter defaultCenter] addObserver:self
+//                                                 selector:@selector(deleteOldFiles)
+//                                                     name:UIApplicationWillTerminateNotification
+//                                                   object:nil];
+//
+//        [[NSNotificationCenter defaultCenter] addObserver:self
+//                                                 selector:@selector(backgroundDeleteOldFiles)
+//                                                     name:UIApplicationDidEnterBackgroundNotification
+//                                                   object:nil];
 #endif
     }
 
@@ -483,6 +484,13 @@ FOUNDATION_STATIC_INLINE NSUInteger SDCacheCostForImage(UIImage *image) {
 }
 
 - (void)deleteOldFilesWithCompletionBlock:(nullable SDWebImageNoParamsBlock)completionBlock {
+    if (completionBlock) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock();
+        });
+    }
+    return;
+    
     dispatch_async(self.ioQueue, ^{
         NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];
         NSArray<NSString *> *resourceKeys = @[NSURLIsDirectoryKey, NSURLContentModificationDateKey, NSURLTotalFileAllocatedSizeKey];
