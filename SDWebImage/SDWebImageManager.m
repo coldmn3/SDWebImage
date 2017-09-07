@@ -217,7 +217,8 @@
                             [self callCompletionBlockForOperation:strongOperation completion:completedBlock image:transformedImage data:downloadedData error:nil cacheType:SDImageCacheTypeNone finished:finished url:url];
                         });
                     } else {
-                        if (downloadedImage && finished) {
+                        // 为RAW图修改
+                        if ((downloadedImage && finished) || (downloadedData && finished) ) {
                             [self.imageCache storeImage:downloadedImage imageData:downloadedData forKey:key toDisk:cacheOnDisk completion:nil];
                         }
                         [self callCompletionBlockForOperation:strongOperation completion:completedBlock image:downloadedImage data:downloadedData error:nil cacheType:SDImageCacheTypeNone finished:finished url:url];
