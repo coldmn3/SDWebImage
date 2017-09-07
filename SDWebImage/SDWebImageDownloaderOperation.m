@@ -445,11 +445,12 @@ didReceiveResponse:(NSURLResponse *)response
                         }
                     }
                 }
-                if (CGSizeEqualToSize(image.size, CGSizeZero)) {
-                    [self callCompletionBlocksWithError:[NSError errorWithDomain:SDWebImageErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey : @"Downloaded image has 0 pixels"}]];
-                } else {
+                // 移除@"Downloaded image has 0 pixels"检查
+//                if (CGSizeEqualToSize(image.size, CGSizeZero)) {
+//                    [self callCompletionBlocksWithError:[NSError errorWithDomain:SDWebImageErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey : @"Downloaded image has 0 pixels"}]];
+//                } else {
                     [self callCompletionBlocksWithImage:image imageData:self.imageData error:nil finished:YES];
-                }
+//                }
             } else {
                 [self callCompletionBlocksWithError:[NSError errorWithDomain:SDWebImageErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey : @"Image data is nil"}]];
             }
