@@ -146,7 +146,7 @@
             return;
         }
 
-        if ((!cachedImage || options & SDWebImageRefreshCached) && (![self.delegate respondsToSelector:@selector(imageManager:shouldDownloadImageForURL:)] || [self.delegate imageManager:self shouldDownloadImageForURL:url])) {
+        if (((!cachedImage && !cachedData) || options & SDWebImageRefreshCached) && (![self.delegate respondsToSelector:@selector(imageManager:shouldDownloadImageForURL:)] || [self.delegate imageManager:self shouldDownloadImageForURL:url])) {
             if (cachedImage && options & SDWebImageRefreshCached) {
                 // If image was found in the cache but SDWebImageRefreshCached is provided, notify about the cached image
                 // AND try to re-download it in order to let a chance to NSURLCache to refresh it from server.
@@ -237,7 +237,7 @@
                 __strong __typeof(weakOperation) strongOperation = weakOperation;
                 [self safelyRemoveOperationFromRunning:strongOperation];
             };
-        } else if (cachedImage) {
+        } else if (cachedImage || (!cachedImage && cachedData)) {
             __strong __typeof(weakOperation) strongOperation = weakOperation;
             [self callCompletionBlockForOperation:strongOperation completion:completedBlock image:cachedImage data:cachedData error:nil cacheType:cacheType finished:YES url:url];
             [self safelyRemoveOperationFromRunning:operation];
